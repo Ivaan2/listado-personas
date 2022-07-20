@@ -1,5 +1,5 @@
 <div class="box">
-  <form class="item" #f="ngForm" (ngSubmit)="f.form.valid && onGuardarPersona()">
+  <form class="item" #f="ngForm" (ngSubmit) = "f.form.valid && onGuardarPersona()">
     <input
       type="text"
       name="nombre"
@@ -19,6 +19,8 @@
     <button type="submit" style="cursor: pointer;">
       +
     </button>
+    <button *ngIf = "index != null" type="submit" style="cursor: pointer;"
+    class="redButton" (click)="eliminarPersona()">-</button>
 </form>
 
 </div>

@@ -1,5 +1,5 @@
 import { Component, ElementRef, EventEmitter, Output, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { LoggingService } from '../../LoggingService.service';
 import { Persona } from '../../persona.model';
 import { PersonasService } from '../../persona.service';
@@ -12,16 +12,42 @@ import { PersonasService } from '../../persona.service';
 export class FormularioComponent  {
   nombreInput:string = '';
   apellidoInput:string = '';  
+  index: number;
 
   constructor(private loggingService:LoggingService,
     private router: Router,
-    private personaService:PersonasService){}
+    private personaService:PersonasService,
+    private route: ActivatedRoute){
+      this.personaService.saludar.subscribe(
+        (indice: number) => alert("El índice es: " + indice)
+      );
+    }
+
+  ngOnInit(): void{
+    this.index = this.route.snapshot.params['id'];
+    if(this.index){
+      let persona = this.personaService.encontrarPersona(this.index);
+      this.nombreInput = persona.nombre;
+      this.apellidoInput = persona.apellido;
+    }
+  }
 
   onGuardarPersona(){
     if(this.nombreInput!='' && this.apellidoInput!=''){
       let persona1 = new Persona(this.nombreInput, this.apellidoInput);
-      this.personaService.agregarPersona(persona1);
+      if(this.index){
+        this.personaService.modificarPersona(this.index, persona1);     
+      }else{
+        this.personaService.agregarPersona(persona1);
+      }
       this.router.navigate(['personas']);
     }
+  }
+
+  eliminarPersona(){
+    if(this.index != null){
+      this.personaService.eliminarPersona(this.index);
+    }
+    this.router.navigate(['personas']);
   }
 }
