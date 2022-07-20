@@ -13,6 +13,7 @@ export class FormularioComponent  {
   nombreInput:string = '';
   apellidoInput:string = '';  
   index: number;
+  modoEdicion: number;
 
   constructor(private loggingService:LoggingService,
     private router: Router,
@@ -25,7 +26,9 @@ export class FormularioComponent  {
 
   ngOnInit(): void{
     this.index = this.route.snapshot.params['id'];
-    if(this.index){
+    this.modoEdicion = this.route.snapshot.queryParams['modoEdicion'];
+
+    if(this.modoEdicion != null && this.modoEdicion == 1){
       let persona = this.personaService.encontrarPersona(this.index);
       this.nombreInput = persona.nombre;
       this.apellidoInput = persona.apellido;
