@@ -14,4 +14,19 @@ export class DataServices{
             error => console.log(error)
         );
     }
+
+    cargarPersonas(){
+        return this.httpClient.get('https://listado-personas-a5dae-default-rtdb.europe-west1.firebasedatabase.app/datos.json');
+    }
+
+    modificarPersona(index: number, persona: Persona){
+        let url: string = 'https://listado-personas-a5dae-default-rtdb.europe-west1.firebasedatabase.app/datos.json';
+        url += index +'.json';
+
+        this.httpClient.put(url, persona)
+            .subscribe(
+                response => console.log("Resultado modificar Persona" + response),
+                error => console.log("Error al modificar Persona" + error)
+            )
+    }
 }

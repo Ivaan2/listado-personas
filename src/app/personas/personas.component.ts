@@ -21,8 +21,15 @@ export class PersonasComponent implements OnInit {
                 );
               }
 
+  //Cargar datos desde la base de datos Firebase Database
   ngOnInit(): void {
-    this.personas = this.personasService.personas;
+    this.personasService.obtenerPersonas()
+    .subscribe(
+      (personas: any): void => {
+        this.personas = personas;
+        this.personasService.setPersonas(personas);
+      }
+    );
   }
 
   agregar(){

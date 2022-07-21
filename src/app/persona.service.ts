@@ -6,8 +6,6 @@ import { Persona } from './persona.model';
 @Injectable()
 export class PersonasService {
   personas: Persona[] = [
-    new Persona('Juan', 'Perez'),
-    new Persona('Laura', 'Juarez'),
   ]; 
 
   saludar = new EventEmitter<number>();
@@ -15,8 +13,21 @@ export class PersonasService {
   constructor(private loggingService:LoggingService,
     private dataServices: DataServices){}
 
+  setPersonas(personas: Persona[]){
+    this.personas = personas;
+  }
+
+  obtenerPersonas(){
+    return this.dataServices.cargarPersonas();
+  }
+
   agregarPersona(persona: Persona) {
     this.loggingService.enviaMensajeAConsola('agregamos persona:' + persona.nombre)
+
+    if(this.personas == null){
+      this.personas = [];
+    }
+
     this.personas.push(persona);
     this.dataServices.guardarPersonas(this.personas);
   }
@@ -29,6 +40,7 @@ export class PersonasService {
     let personaAModificar = this.personas[index];
     personaAModificar.nombre = persona.nombre;
     personaAModificar.apellido = persona.apellido;
+    this.dataServices.modificarPersona(index, persona);
   }
 
   eliminarPersona(index: number){
